@@ -1,8 +1,7 @@
 from operator import add, mul
 
 
-def run_part1(program):
-    program = list(program)
+def program_loop(program):
     cir = 0  # current instruction register
     while cir < len(program):
         opcode = program[cir]
@@ -18,8 +17,19 @@ def run_part1(program):
         cir += 4
 
 
+def run_part1(program):
+    return program_loop(program)
+
+
 def run_part2(program, output_to_find):
-    return 0, 0
+    initial_state = list(program)
+
+    for i in range(100):
+        for j in range(100):
+            program = init_program(initial_state, noun=i, verb=j)
+            results = program_loop(program)
+            if results[0] == output_to_find:
+                return i, j
 
 
 def get_puzzle(filename):
@@ -27,9 +37,10 @@ def get_puzzle(filename):
         return list(map(int, file.read().rstrip().split(',')))
 
 
-def init_1202_program():
-    program[1] = 12
-    program[2] = 2
+def init_program(program, noun, verb):
+    program = list(program)
+    program[1] = noun
+    program[2] = verb
     return program
 
 
@@ -37,10 +48,10 @@ if __name__ == '__main__':
     result = run_part1([1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50])
     assert result == [3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50], 'actual: %s' % result
 
-    program = get_puzzle('day2.txt')
-    init_1202_program()
-    result = run_part1(program)
-    print(result)
+    input_data = get_puzzle('day2.txt')
 
-    noun, verb = run_part2(program, 19690720)
-    print(noun, verb * 100)
+    program = init_program(input_data, noun=12, verb=2)
+    print(run_part1(program)[0])
+
+    noun, verb = run_part2(input_data, output_to_find=19690720)
+    print(100 * noun + verb)
