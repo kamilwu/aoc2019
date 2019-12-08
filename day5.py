@@ -1,11 +1,10 @@
 from operator import add, mul
 
 
-BUFFER = []
-
-
-def program_loop(program, input_value):
+def program_loop(program, input_values_gen, buffer=None):
     program = list(program)
+    if buffer is None:
+        buffer = []
     cir = 0  # current instruction register
 
     while cir < len(program):
@@ -36,10 +35,10 @@ def program_loop(program, input_value):
             inputs = program[next(addr)], program[next(addr)]
             program[next(addr)] = mul(*inputs)
         elif opcode == 3:
-            program[next(addr)] = input_value
+            program[next(addr)] = next(input_values_gen)
         elif opcode == 4:
             inputs = program[next(addr)]
-            BUFFER.append(inputs)
+            buffer.append(inputs)
         elif opcode == 5:
             cond = program[next(addr)]
             ptr = program[next(addr)]
@@ -57,7 +56,7 @@ def program_loop(program, input_value):
             cond = program[next(addr)] == program[next(addr)]
             program[next(addr)] = 1 if cond else 0
         elif opcode == 99:
-            return program
+            return buffer
 
         cir += offset + 1
 
@@ -67,37 +66,32 @@ def get_puzzle(filename):
         return list(map(int, file.read().rstrip().split(',')))
 
 
-def buf_print():
-    global BUFFER
-    BUFFER.reverse()
-    while BUFFER:
-        print(BUFFER.pop())
+def input_gen(number):
+    while True:
+        yield number
 
 
 if __name__ == '__main__':
     puzzle = get_puzzle('day5.txt')
-    program_loop(puzzle, 1)
-    buf_print()
+    buffer = program_loop(puzzle, input_gen(1))
+    print(buffer)
 
     test_input = [
         3, 21, 1008, 21, 8, 20, 1005, 20, 22, 107, 8, 21, 20, 1006, 20, 31,
         1106, 0, 36, 98, 0, 0, 1002, 21, 125, 20, 4, 20, 1105, 1, 46, 104,
         999, 1105, 1, 46, 1101, 1000, 1, 20, 4, 20, 1105, 1, 46, 98, 99
     ]
-    program_loop(test_input, 7)
-    assert len(BUFFER) == 1
-    result = BUFFER.pop()
+    buffer = program_loop(test_input, input_gen(7))
+    result = buffer.pop()
     assert result == 999, 'actual %s' % result
 
-    program_loop(test_input, 8)
-    assert len(BUFFER) == 1
-    result = BUFFER.pop()
+    buffer = program_loop(test_input, input_gen(8))
+    result = buffer.pop()
     assert result == 1000, 'actual %s' % result
 
-    program_loop(test_input, 9)
-    assert len(BUFFER) == 1
-    result = BUFFER.pop()
+    buffer = program_loop(test_input, input_gen(9))
+    result = buffer.pop()
     assert result == 1001, 'actual %s' % result
 
-    program_loop(puzzle, 5)
-    buf_print()
+    buffer = program_loop(puzzle, input_gen(5))
+    print(buffer)
