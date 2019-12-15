@@ -57,7 +57,7 @@ def run(robot, program):
     class OutputCarrier:
         buf = []
 
-        def append(self, item):
+        def out(self, item):
             self.buf.append(item)
             if len(self.buf) == 2:
                 robot.paint_and_move(self.buf[0], self.buf[1])

@@ -26,14 +26,18 @@ class ExtendableList(UserList):
             super().__setitem__(key, value)
 
 
-def program_loop(program, input_values_gen, buffer=None):
+class OutDevice:
+    def out(self, item):
+        raise NotImplementedError
+
+
+def program_loop(program, input_values_gen, device):
     program = ExtendableList(program)
-    if buffer is None:
-        buffer = []
     cir = 0  # current instruction register
     relative_base = 0
+    opcode = 0
 
-    while cir < len(program):
+    while opcode != 99:
         value = program[cir]
         offset = 0
 
@@ -69,7 +73,7 @@ def program_loop(program, input_values_gen, buffer=None):
             program[next(addr)] = next(input_values_gen)
         elif opcode == 4:
             inputs = program[next(addr)]
-            buffer.append(inputs)
+            device.out(inputs)
         elif opcode == 5:
             cond = program[next(addr)]
             ptr = program[next(addr)]
@@ -89,8 +93,6 @@ def program_loop(program, input_values_gen, buffer=None):
         elif opcode == 9:
             param = program[next(addr)]
             relative_base += param
-        elif opcode == 99:
-            return buffer
 
         cir += offset + 1
 
@@ -105,14 +107,22 @@ def input_gen(number):
         yield number
 
 
+class Buffer(OutDevice, UserList):
+    def out(self, item):
+        self.append(item)
+
+
 if __name__ == '__main__':
     test = [109,  1,  204, -1, 1001, 100, 1, 100, 1008, 100, 16, 101, 1006, 101, 0, 99]
-    result = program_loop(test, input_gen(1))
+    result = Buffer()
+    program_loop(test, input_gen(1), result)
     assert result == test, 'actual: %s' % result
 
     puzzle = get_puzzle('day9.txt')
-    buffer = program_loop(puzzle, input_gen(1))
+    buffer = Buffer()
+    program_loop(puzzle, input_gen(1), buffer)
     print(buffer)
 
-    buffer = program_loop(puzzle, input_gen(2))
+    buffer = Buffer()
+    program_loop(puzzle, input_gen(2), buffer)
     print(buffer)
