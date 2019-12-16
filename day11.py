@@ -49,21 +49,24 @@ class Robot:
         self._current_pos += self._facing_at.value
 
 
+class Controller:
+    def __init__(self, robot):
+        self.robot = robot
+        self.signals = []
+
+    def out(self, item):
+        self.signals.append(item)
+        if len(self.signals) == 2:
+            self.robot.paint_and_move(self.signals[0], self.signals[1])
+            self.signals.clear()
+
+
 def run(robot, program):
     def input_gen():
         while True:
             yield robot.get_color()
 
-    class OutputCarrier:
-        buf = []
-
-        def out(self, item):
-            self.buf.append(item)
-            if len(self.buf) == 2:
-                robot.paint_and_move(self.buf[0], self.buf[1])
-                self.buf.clear()
-
-    day9.program_loop(program, input_gen(), OutputCarrier())
+    day9.program_loop(program, input_gen(), Controller(robot))
     return len(robot.panels)
 
 

@@ -31,7 +31,7 @@ class OutDevice:
         raise NotImplementedError
 
 
-def program_loop(program, input_values_gen, device):
+def program_loop(program, in_device, out_device):
     program = ExtendableList(program)
     cir = 0  # current instruction register
     relative_base = 0
@@ -70,10 +70,10 @@ def program_loop(program, input_values_gen, device):
             inputs = program[next(addr)], program[next(addr)]
             program[next(addr)] = mul(*inputs)
         elif opcode == 3:
-            program[next(addr)] = next(input_values_gen)
+            program[next(addr)] = next(in_device)
         elif opcode == 4:
             inputs = program[next(addr)]
-            device.out(inputs)
+            out_device.out(inputs)
         elif opcode == 5:
             cond = program[next(addr)]
             ptr = program[next(addr)]
