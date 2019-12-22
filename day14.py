@@ -21,9 +21,9 @@ def get_recipes(input):
     return recipes
 
 
-def get_fuel_cost(recipes):
+def get_fuel_cost(recipes, fuel_units=1):
     orders = SimpleQueue()
-    orders.put(Order('FUEL', 1))
+    orders.put(Order('FUEL', fuel_units))
     supply = defaultdict(int)
     ore_needed = 0
 
@@ -46,7 +46,17 @@ def get_fuel_cost(recipes):
 
 
 def make_fuel(recipes, ore_available):
-    pass
+    start = 1
+    end = 10000000
+
+    while end - start > 1:
+        pivot = (end + start) // 2
+        usage = get_fuel_cost(recipes, pivot)
+        if usage > ore_available:
+            end = pivot
+        else:
+            start = pivot
+    return start
 
 
 def get_puzzle(filename):
@@ -88,3 +98,4 @@ if __name__ == '__main__':
     recipes = get_recipes(get_puzzle('day14.txt'))
     fuel_cost = get_fuel_cost(recipes)
     print(fuel_cost)
+    print(make_fuel(recipes, 1000000000000))
