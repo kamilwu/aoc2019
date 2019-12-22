@@ -1,26 +1,13 @@
+from queue import Queue
 from itertools import permutations
 import threading
 
 import day5
 
 
-class SharedBuffer:
-    def __init__(self):
-        self.buffer = []
-        self._cv = threading.Condition()
-
-    def consume(self):
-        with self._cv:
-            if self.buffer:
-                return self.buffer.pop(0)
-            else:
-                self._cv.wait()
-                return self.buffer.pop(0)
-
+class SynchronizedQueue(Queue):
     def append(self, item):
-        with self._cv:
-            self.buffer.append(item)
-            self._cv.notify()
+        self.put(item)
 
 
 def amplify(program, phase_setting):
@@ -35,7 +22,7 @@ def amplify(program, phase_setting):
 
 
 def amplify_with_loop(program, phase_setting):
-    buffers = [SharedBuffer() for _ in range(len(phase_setting))]
+    buffers = [SynchronizedQueue() for _ in range(len(phase_setting))]
     threads = []
 
     def input_gen(i, phase):
@@ -43,7 +30,7 @@ def amplify_with_loop(program, phase_setting):
         if i == 0:
             yield 0
         while True:
-            yield buffers[i - 1].consume()
+            yield buffers[i - 1].get()
 
     for i, phase in enumerate(phase_setting):
         thread = threading.Thread(target=day5.program_loop,
@@ -56,7 +43,7 @@ def amplify_with_loop(program, phase_setting):
 
     for thread in threads:
         thread.join()
-    return buffers[-1].consume()
+    return buffers[-1].get()
 
 
 def largest_amplification(program, phase_setting, feedback_loop=False):
