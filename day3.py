@@ -52,7 +52,7 @@ if __name__ == '__main__':
                  'U98,R91,D20,R16,D67,R40,U7,R15,U6,R7')
     assert result == (135, 410), 'actual: {}'.format(result)
 
-    with open('day3.txt') as file:
+    with open('data/day3.txt') as file:
         first_path, second_path = file.readlines()
         result = run(first_path, second_path)
         print(result)

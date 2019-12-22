@@ -122,7 +122,7 @@ if __name__ == '__main__':
                       get_set_of_nodes(tree)) - 2
     assert result == 4, 'actual: %s' % result
 
-    puzzle = get_puzzle('day6.txt')
+    puzzle = get_puzzle('data/day6.txt')
     tree = build_tree(puzzle)
     print(tree.lengths_sum())
     print(dijkstra(tree.find('YOU'), tree.find('SAN'),

@@ -56,7 +56,7 @@ def launch_laser(angles, station, stops_at):
 
 
 if __name__ == '__main__':
-    with open('day10.txt') as file:
+    with open('data/day10.txt') as file:
         asteroids = [x.rstrip() for x in file.readlines()]
 
     test = ['.#..#', '.....', '#####', '....#', '...##']

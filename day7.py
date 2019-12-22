@@ -59,7 +59,7 @@ def largest_amplification(program, phase_setting, feedback_loop=False):
 
 if __name__ == '__main__':
     # part 1
-    program = day5.get_puzzle('day7.txt')
+    program = day5.get_puzzle('data/day7.txt')
     print(largest_amplification(program, range(5)))
 
     # part 2

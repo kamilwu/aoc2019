@@ -6,7 +6,7 @@ def formula(mass):
 
 
 def calc_fuel_requirements():
-    with open('day1.txt') as file:
+    with open('data/day1.txt') as file:
         return [formula(int(x)) for x in file.readlines()]
 
 

@@ -71,7 +71,7 @@ def run(robot, program):
 
 
 if __name__ == '__main__':
-    program = day9.get_puzzle('day11.txt')
+    program = day9.get_puzzle('data/day11.txt')
     robot = Robot(Color.BLACK)
     print(run(robot, program))
 

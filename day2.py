@@ -48,7 +48,7 @@ if __name__ == '__main__':
     result = run_part1([1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50])
     assert result == [3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50], 'actual: %s' % result
 
-    input_data = get_puzzle('day2.txt')
+    input_data = get_puzzle('data/day2.txt')
 
     program = init_program(input_data, noun=12, verb=2)
     print(run_part1(program)[0])

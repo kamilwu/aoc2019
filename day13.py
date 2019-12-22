@@ -85,6 +85,6 @@ def part2(program):
 
 
 if __name__ == '__main__':
-    program = day9.get_puzzle('day13.txt')
+    program = day9.get_puzzle('data/day13.txt')
     print(part1(program))
     print('Total score:', part2(program))

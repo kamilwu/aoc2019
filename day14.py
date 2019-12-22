@@ -95,7 +95,7 @@ if __name__ == '__main__':
     fuel_cost = get_fuel_cost(get_recipes(test))
     assert fuel_cost == 2210736, 'actual: %s' % fuel_cost
 
-    recipes = get_recipes(get_puzzle('day14.txt'))
+    recipes = get_recipes(get_puzzle('data/day14.txt'))
     fuel_cost = get_fuel_cost(recipes)
     print(fuel_cost)
     print(make_fuel(recipes, 1000000000000))

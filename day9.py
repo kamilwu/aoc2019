@@ -118,7 +118,7 @@ if __name__ == '__main__':
     program_loop(test, input_gen(1), result)
     assert result == test, 'actual: %s' % result
 
-    puzzle = get_puzzle('day9.txt')
+    puzzle = get_puzzle('data/day9.txt')
     buffer = Buffer()
     program_loop(puzzle, input_gen(1), buffer)
     print(buffer)

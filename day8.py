@@ -30,7 +30,7 @@ def decode_and_print(width, layers):
 
 
 if __name__ == '__main__':
-    puzzle = get_puzzle('day8.txt')
+    puzzle = get_puzzle('data/day8.txt')
     layers = process_image(25, 6, puzzle)
     print(check_integrity(layers))
     decode_and_print(25, layers)

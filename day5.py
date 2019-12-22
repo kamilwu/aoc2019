@@ -72,7 +72,7 @@ def input_gen(number):
 
 
 if __name__ == '__main__':
-    puzzle = get_puzzle('day5.txt')
+    puzzle = get_puzzle('data/day5.txt')
     buffer = program_loop(puzzle, input_gen(1))
     print(buffer)
 
